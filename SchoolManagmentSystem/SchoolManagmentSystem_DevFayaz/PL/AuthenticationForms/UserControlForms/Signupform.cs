@@ -1,0 +1,262 @@
+﻿using SchoolManagmentSystem_DevFayaz.BL;
+using SchoolManagmentSystem_DevFayaz.Custom_Classes;
+using SchoolManagmentSystem_DevFayaz.Enums;
+using SchoolManagmentSystem_DevFayaz.MODELS;
+using SchoolManagmentSystem_DevFayaz.MODELS.Dashboardmodels;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace SchoolManagmentSystem_DevFayaz.PL.AuthenticationForms.UserControlForms
+{
+    public partial class Signupform : UserControl
+    {
+        public Signupform()
+        {
+            InitializeComponent();
+            comboboxRole.DataSource = Enum.GetValues(typeof(Role));
+
+        }
+
+        private void linkLabelSignup_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Authenticationfrm authenticationfrm = (Authenticationfrm)this.FindForm();
+            authenticationfrm.Showloginform();
+        }
+
+        string filepath;
+        private void btnsignup_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                if (PlValidations())
+                {
+
+                    if (Getdata())
+                    {
+                        MessageBox.Show("Email OR Username Already Exist");
+
+                    }
+                    else
+                    {
+                        UserinfoModel userinfomodel = new UserinfoModel();
+                        userinfomodel.User_Name = txtusername.Text;
+                        userinfomodel.User_Email = txtemail.Text;
+                        userinfomodel.User_Password = txtpassword.Text;
+                        userinfomodel.User_Image = filepath;
+                        //userinfomodel.User_Role = Convert.ToInt32(Role.Admin|Role.Employee | Role.Teacher | Role.Student);
+                        userinfomodel.User_Role = (int)(Role)comboboxRole.SelectedItem;
+
+                        BLUserinfo bLUserinfo = new BLUserinfo();
+                        
+                        if(!bLUserinfo.UserValidation(userinfomodel))    // fluentvalidations in bl (for backend )
+                        {
+                            return;
+                        }
+                        LogModel logModel = new LogModel();         // checking the role that who is signing a user
+                        logModel.UserId = UserCreads.UserId;
+                        logModel.Message = ("New SignUp: UserName" + userinfomodel.User_Name + ",Role:" + userinfomodel.User_Role);
+                        logModel.CreateAt = DateTime.Now;
+                        BL_Log.Insert(logModel);
+                        bLUserinfo.Insert(userinfomodel);
+                        MessageBox.Show("signup successfully");
+                        Cleartextboxes();
+
+                        Authenticationfrm authenticationfrm = (Authenticationfrm)this.FindForm();
+                        authenticationfrm.Showloginform();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error" + ex.Message);
+                return;
+            }
+        }
+
+        public bool Getdata()
+        {
+
+            BLUserinfo bLUserinfo = new BLUserinfo();
+            DataTable dt = new DataTable();
+            dt = bLUserinfo.CheckIdentity(txtusername.Text, txtemail.Text); 
+            if (dt.Rows.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+
+            }
+        }
+        public bool PlValidations()
+        {
+            bool isvalid = true;        // check all the itmes first 
+
+            if (string.IsNullOrEmpty(txtusername.Text))
+            {
+                txtusername.BorderColor = Color.Red;
+                isvalid = false;
+            }
+            else
+            {
+                txtusername.BorderColor = Color.Green;
+            }
+            if (string.IsNullOrEmpty(txtpassword.Text))
+            {
+                txtpassword.BorderColor = Color.Red;
+                isvalid = false;
+            }
+            else
+            {
+                txtpassword.BorderColor = Color.Green;
+            }
+
+            if (string.IsNullOrEmpty(txtemail.Text))
+            {
+                txtemail.BorderColor = Color.Red;
+                isvalid = false;
+            }
+            else
+            {
+                txtemail.BorderColor = Color.Green;
+            }
+
+            if (string.IsNullOrEmpty(comboboxRole.Text))
+            {
+                comboboxRole.BorderColor = Color.Red;
+                isvalid = false;
+            }
+            else
+            {
+                comboboxRole.BorderColor = Color.Green;
+            }
+            if (string.IsNullOrEmpty(filepath))
+            {
+                picbox.FillColor = Color.Red;
+                isvalid = false;
+            }
+            else
+            {
+                picbox.FillColor = Color.White;
+                isvalid = true;
+            }
+
+            return isvalid;
+        }
+        public void Cleartextboxes()
+        {
+            txtusername.Clear();
+            txtpassword.Clear();
+            txtemail.Clear();
+            comboboxRole.SelectedIndex = -1; // just clears the selection, not the data
+            picbox.Image = null;            // clear the image picbox 
+        }
+
+        private void picbox_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                OpenFileDialog openFileDialog = new OpenFileDialog();
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    filepath = openFileDialog.FileName;
+                    picbox.Image = Bitmap.FromFile(filepath);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error" + ex.Message);
+            }
+        }
+
+        private void txtusername_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsLetterOrDigit(e.KeyChar) || e.KeyChar == (char)Keys.Back)
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtemail_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsLetterOrDigit(e.KeyChar) || e.KeyChar == (char)Keys.Back || e.KeyChar == '@' || e.KeyChar == '.' || e.KeyChar == '_')
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtpassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsLetterOrDigit(e.KeyChar) || e.KeyChar == (char)Keys.Back || e.KeyChar == '.' || e.KeyChar == '_')
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void comboboxRole_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsLetterOrDigit(e.KeyChar) || e.KeyChar == (char)Keys.Back)
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                e.Handled = true;
+            }
+        }
+
+
+        private void comboboxRole_SelectedValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtpassword_TextChanged(object sender, EventArgs e)
+        {
+            if(btnshowhide.Text !="")
+            {
+                btnshowhide.Visible = true;
+
+            }
+            else
+            {
+                btnshowhide.Visible = false;
+            }
+        }
+
+        private void btnshowhide_MouseEnter(object sender, EventArgs e)
+        {
+            txtpassword.PasswordChar = '\0';
+            btnshowhide.Text = "H";
+        }
+
+        private void btnshowhide_MouseLeave(object sender, EventArgs e)
+        {
+            txtpassword.PasswordChar = '*';
+            btnshowhide.Text = "S";
+        }
+    }
+}
+
