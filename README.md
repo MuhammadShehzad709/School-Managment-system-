@@ -1,34 +1,189 @@
-# School Management System
+# 🏫 School Management System
 
-A comprehensive and user-friendly School Management System built using C#. This application is designed to streamline administrative tasks, manage student and teacher records, and handle daily school operations efficiently.
-
----
-
-## 🚀 Features
-
-*   **Student Management:** Easily add, update, view, and delete student profiles and academic records.
-*   **Teacher Management:** Track teacher details, assigned classes, and schedules.
-*   **Administrative Dashboard:** Overview of school statistics (total students, teachers, etc.).
-*   **User Authentication:** Secure login system for administrators and staff.
+A complete **C# Windows Forms Desktop Application** built using **Layered Architecture (3-Tier Architecture)** for managing school operations including students, teachers, classes, admissions, fees, users, and system logs.
 
 ---
 
-## 🛠️ Tech Stack
+## 🚀 Project Overview
 
-*   **Language:** C# (100%)
-*   **Framework:** .NET / .NET Desktop (Windows Forms / WPF)
-*   **Database:** MS SQL Server / SQLite (or specify your database here)
+This project is designed to automate school management processes using a structured and scalable architecture.
+
+It follows:
+
+- 🎨 Presentation Layer (PL) – Windows Forms UI
+- ⚙ Business Logic Layer (BL)
+- 🗄 Data Access Layer (DL)
+- 📦 Models Layer (Data Transfer Objects)
+- 🔐 Enums & Validations Layer
 
 ---
 
-## 💻 Getting Started
+## ✨ Features
 
-### Prerequisites
-Before running this project, ensure you have the following installed:
-*   [.NET SDK](https://dotnet.microsoft.com/download) (Version 6.0 or higher recommended)
-*   [Visual Studio 2022](https://visualstudio.microsoft.com/) (with .NET Desktop Development workload)
+### 👨‍🎓 Student Management
+- Add / Update / Delete / View Students
+- Store personal information
+- Upload documents (Form B, Domicile)
 
-### Installation & Setup
-1. **Clone the repository:**
-```bash
-   git clone [https://github.com/MuhammadShehzad709/School-Managment-system-.git](https://github.com/MuhammadShehzad709/School-Managment-system-.git)
+### 👨‍🏫 Teacher Management
+- Manage teacher records
+- CNIC, Qualification, Subject, Designation
+- Date of Joining tracking
+
+### 🏫 Class Management
+- Class creation & section management
+- Section strength handling
+- Student-class mapping
+
+### 🧾 Admission System
+- Admission form management
+- Form number tracking
+- Student admission records
+
+### 💰 Fee Management
+- Fee submission system
+- Pending fee tracking
+- Fee status management
+
+### 👤 User Management
+- Role-based access control
+- OTP verification system
+- Email-based authentication
+
+### 📜 Logging System
+- Track system activities
+- User actions monitoring
+- Audit logs for students/users
+
+---
+
+## 📦 Models Structure
+
+### 🎓 AdmissionModel
+- Admission Id
+- Form Number
+- Admission Date
+- Student Id
+
+### 🏫 ClassModel
+- Class Name
+- Section
+- Section Strength
+- Student Id mapping
+
+### 📜 LogModel
+- Action Type
+- User Id
+- Student Id
+- Message
+- Created At
+
+### 👨‍💼 EmployeModel
+- Employee details
+- CNIC, Qualification, Designation
+- Email & Joining Date
+
+### 💰 StudentFeeModel
+- Fee Amount
+- Pending Amount
+- Submission Date
+- Fee Status
+
+### 👨‍🎓 StudentsModel
+- Student Name
+- Father Name
+- Roll Number
+- DOB
+- Gender
+- Documents (Form B, Domicile)
+
+### 👨‍🏫 TeachersModel
+- Teacher Name
+- CNIC
+- Qualification
+- Subject
+- Email
+- Joining Date
+
+### 👤 UserInfoModel
+- Username
+- Email
+- Password
+- Role
+- OTP
+- Status
+- Profile Image
+
+---
+
+## 🛠 Technologies Used
+
+- 💻 C# (.NET Framework)
+- 🪟 Windows Forms (WinForms)
+- 🗄 SQL Server
+- ⚙ ADO.NET
+- 🏗 Layered Architecture
+- 🔐 Enums & Validations
+- 📧 Email OTP System
+
+---
+
+## 📁 Project Structure
+SchoolManagmentSystem
+│
+├── BL (Business Logic Layer)
+├── DL (Data Access Layer)
+├── MODELS
+├── PL (Presentation Layer - UI)
+├── Enums
+├── Validations
+├── Custom Classes
+└── Program.cs
+
+---
+
+## 🏗 Architecture Flow
+UI (PL)
+↓
+Business Logic (BL)
+↓
+Data Access Layer (DL)
+↓
+SQL Server Database
+
+
+---
+
+## 🔐 Security Features
+
+- OTP Verification
+- Role-based Authentication
+- Input Validations
+- Secure Login System
+
+---
+
+## 📌 Future Improvements
+
+- ASP.NET Core Web Version
+- REST API Integration
+- Dashboard Analytics (Charts)
+- Mobile Application
+- Cloud Database Support
+
+---
+
+## 👨‍💻 Author
+
+**Muhammad Shehzad**
+
+- GitHub: https://github.com/MuhammadShehzad709
+
+---
+
+## ⭐ Status
+
+✔ Completed Desktop Application  
+✔ Layered Architecture Implemented  
+✔ Database Integrated  
+✔ GitHub Ready Project
